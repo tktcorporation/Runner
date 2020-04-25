@@ -20,7 +20,7 @@ public class BackGround : MonoBehaviour
     {
         sprite = GetComponent<SpriteRenderer>();
         width = sprite.bounds.size.x;
-        xMiddleWidth = width / 2;
+        xMiddleWidth = width / 4;
         camera = Camera.main;
     }
 
