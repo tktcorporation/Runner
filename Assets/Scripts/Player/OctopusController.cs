@@ -13,7 +13,7 @@ public class OctopusController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        new MoveController(rb, transform).Move(Input.GetAxis("Horizontal"));
+        new RunController(rb, transform).Move(Input.GetAxis("Horizontal"));
         new JumpController(rb, transform).Jump(Input.GetKeyDown(KeyCode.Space));
     }
 }
