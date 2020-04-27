@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveController
+public class RunController
 {
     private Rigidbody2D rb;
     private Transform transform;
 
-    public MoveController(Rigidbody2D r, Transform t)
+    public RunController(Rigidbody2D r, Transform t)
     {
         rb = r;
         transform = t;
