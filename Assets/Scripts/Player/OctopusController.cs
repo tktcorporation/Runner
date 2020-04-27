@@ -16,4 +16,9 @@ public class OctopusController : MonoBehaviour
         new RunController(rb, transform).Move(Input.GetAxis("Horizontal"));
         new JumpController(rb, transform).Jump(Input.GetKeyDown(KeyCode.Space));
     }
+
+    private void LateUpdate()
+    {
+        new FailController(transform).Check();
+    }
 }
