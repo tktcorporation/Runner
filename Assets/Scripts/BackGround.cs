@@ -13,7 +13,7 @@ public class BackGround : MonoBehaviour
     float width;
     float xMiddleWidth;
     SpriteRenderer sprite;
-    Camera camera;
+    Camera mainCamera;
 
     //初期化
     private void Start()
@@ -21,7 +21,7 @@ public class BackGround : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         width = sprite.bounds.size.x;
         xMiddleWidth = width / 4;
-        camera = Camera.main;
+        mainCamera = Camera.main;
     }
 
     private void LateUpdate()
@@ -40,7 +40,7 @@ public class BackGround : MonoBehaviour
 
     private DirectionMap getDirectionToReplace(float xPosition, float xMiddleWidth)
     {
-        float xCameraPosition = camera.transform.position.x;
+        float xCameraPosition = mainCamera.transform.position.x;
         if (xCameraPosition > calculateTargetPositionX(xPosition,xMiddleWidth, DirectionMap.front))
             return DirectionMap.front;
         if (xCameraPosition < calculateTargetPositionX(xPosition, xMiddleWidth, DirectionMap.back))
