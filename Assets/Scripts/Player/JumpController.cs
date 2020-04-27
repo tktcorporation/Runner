@@ -36,7 +36,7 @@ public class JumpController
 
     class ForceMap
     {
-        public static float jumpForce = 2000f;
-        public static float jumpThreshold = 1f;
+        public static float jumpForce = 1500f;
+        public static float jumpThreshold = 0.5f;
     }
 }
