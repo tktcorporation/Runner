@@ -18,7 +18,7 @@ public class Manager : MonoBehaviour
     public static void GameOver()
     {
         status = StatusMap.overed;
-        gameOverCanvas = Instantiate(Resources.Load<GameObject>("GameOverCanvas"));
+        gameOverCanvas = Instantiate(Resources.Load<GameObject>("UI/GameOverCanvas"));
         retryButton = gameOverCanvas.GetComponentsInChildren<Button>()[0];
         retryButton.onClick.AddListener(Retry);
     }
