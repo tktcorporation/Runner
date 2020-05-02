@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class JumpController
 {
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     private Transform transform;
 
-    public JumpController(Rigidbody2D r, Transform t)
+    public JumpController(Rigidbody r, Transform t)
     {
         rb = r;
         transform = t;

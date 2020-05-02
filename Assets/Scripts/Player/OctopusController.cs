@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class OctopusController : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame

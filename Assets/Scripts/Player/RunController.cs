@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class RunController
 {
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     private Transform transform;
 
-    public RunController(Rigidbody2D r, Transform t)
+    public RunController(Rigidbody r, Transform t)
     {
         rb = r;
         transform = t;
