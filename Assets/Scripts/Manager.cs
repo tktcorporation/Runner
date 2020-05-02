@@ -6,28 +6,27 @@ using UnityEngine.UI;
 
 public class Manager : MonoBehaviour
 {
-    public static StatusMap status = StatusMap.playing;
-    static GameObject gameOverCanvas;
-    static Button retryButton;
+    public static StatusMap status;
+    public static int points;
+    static GameOverCanvas gameOverCanvas;
 
     void Start()
     {
         DontDestroyOnLoad(gameObject);
+        status = StatusMap.playing;
+        points = 0;
     }
 
     public static void GameOver()
     {
         status = StatusMap.overed;
-        gameOverCanvas = Instantiate(Resources.Load<GameObject>("UI/GameOverCanvas"));
-        retryButton = gameOverCanvas.GetComponentsInChildren<Button>()[0];
-        retryButton.onClick.AddListener(Retry);
+        gameOverCanvas = new GameOverCanvas(Instantiate(GameOverCanvas.GetPrefab()), Retry);
     }
-
-    public static void Retry()
+    static void Retry()
     {
-        Destroy(gameOverCanvas);
         WaitForLoadScene(ScenesMap.Main);
         status = StatusMap.playing;
+        Destroy(gameOverCanvas.obj);
     }
 
     static IEnumerator WaitForLoadScene(string sceneName)
