@@ -4,21 +4,27 @@ using UnityEngine;
 
 public class OctopusController : MonoBehaviour
 {
-    private Rigidbody rb;
+    public static Vector3 startPosition = new Vector3(0, 3, 0);
+    Player.Octopus octopus;
+
+    // Life cycle method
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        octopus = new Player.Octopus(
+            transform,
+            GetComponent<Rigidbody>(),
+            new Running.ForceMap(),
+            new Jumping.ForceMap()
+        );
+        octopus.ChangePosition(startPosition);
     }
-
-    // Update is called once per frame
     void FixedUpdate()
     {
-        new RunController(rb, transform).Move(Input.GetAxis("Horizontal"));
-        new JumpController(rb, transform).Jump(Input.GetKeyDown(KeyCode.Space));
+        octopus.Run(Input.GetAxis("Horizontal"));
+        octopus.Jump(Input.GetKeyDown(KeyCode.Space));
     }
-
     private void LateUpdate()
     {
-        new FailController(transform).Check();
+        new FailController(octopus).Check();
     }
 }
