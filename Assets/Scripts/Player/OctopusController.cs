@@ -23,8 +23,4 @@ public class OctopusController : MonoBehaviour
         octopus.Run(Input.GetAxis("Horizontal"));
         octopus.Jump(Input.GetKeyDown(KeyCode.Space));
     }
-    private void LateUpdate()
-    {
-        new FailController(octopus).Check();
-    }
 }
