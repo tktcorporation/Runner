@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class CoinController : MonoBehaviour
 {
-    Rigidbody rigidbody;
+    Rigidbody rb;
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
-        rigidbody.angularVelocity = new Vector3(0f, 2f, 0f);
+        rb = GetComponent<Rigidbody>();
+        rb.angularVelocity = new Vector3(0f, 2f, 0f);
     }
 
     void FixedUpdate()
