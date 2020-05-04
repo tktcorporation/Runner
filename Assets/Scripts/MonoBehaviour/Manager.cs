@@ -41,6 +41,12 @@ public class Manager : MonoBehaviour
         Manager.GameOver();
     }
 
+    public static int AddPoints(int num)
+    {
+        points += num;
+        return points;
+    }
+
     public enum StatusMap
     {
         playing = 0,
