@@ -5,6 +5,9 @@ public class CoinsManager : MonoBehaviour
 {
     public static string prefabPath = "Item/Coin";
     GameObject coin;
+    static int generateHeight = 20;
+    static int randamRangeMin = 1;
+    static int randamRangeMax = 40;
 
     IEnumerator Generating()
     {
@@ -16,7 +19,14 @@ public class CoinsManager : MonoBehaviour
     }
     void Generate()
     {
-        Instantiate(coin);
+        GameObject clone = Instantiate(coin);
+        new Item.Coin(clone).ChangePosition(
+            new Vector3(
+                Random.Range(randamRangeMin, randamRangeMax),
+                generateHeight,
+                0
+            )
+        );
     }
 
     // LifeCycle Methods
@@ -25,9 +35,4 @@ public class CoinsManager : MonoBehaviour
         coin = Item.Coin.GetPrefab(prefabPath);
         StartCoroutine("Generating");
     }
-
-    void Update()
-    {
-    }
-
 }
