@@ -31,7 +31,7 @@ public class Manager : MonoBehaviour
         yield return SceneManager.LoadSceneAsync(sceneName);
     }
 
-    public void PlayerFailCheck()
+    void PlayerFailCheck()
     {
         if (!failController.IsFailed())
             return;
