@@ -30,7 +30,11 @@ public class BackGround : MonoBehaviour
         DirectionMap direction = getDirectionToReplace(xPosition, xMiddleWidth);
         if (direction == DirectionMap.center)
             return;
-        transform.position = new Vector2(calculateTargetPositionX(xPosition, xMiddleWidth, direction), sprite.transform.position.y);
+        transform.position = new Vector3(
+            calculateTargetPositionX(xPosition,xMiddleWidth, direction),
+            sprite.transform.position.y,
+            sprite.transform.position.z
+        );
     }
 
     private float calculateTargetPositionX(float xPosition, float xMiddleWidth, DirectionMap direction)
