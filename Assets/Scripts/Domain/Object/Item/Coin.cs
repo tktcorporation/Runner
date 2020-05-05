@@ -1,11 +1,44 @@
 ﻿using UnityEngine;
+using System.Collections;
+
 namespace Object.Item
 {
     public class Coin : Base
     {
-        public static GameObject GetPrefab(string path)
+        public static IEnumerator GeneratePerInteravl(
+            float intervalSeconds,
+            GameObject coin,
+            float randamRangeMinX,
+            float randamRangeMaxX,
+            float positionY
+         )
         {
-            return Resources.Load<GameObject>(path);
+            while (true)
+            {
+                yield return new WaitForSeconds(intervalSeconds);
+                Generate(
+                    coin,
+                    randamRangeMinX,
+                    randamRangeMaxX,
+                    positionY
+                );
+            }
+        }
+        static void Generate(
+            GameObject coin,
+            float randamRangeMinX,
+            float randamRangeMaxX,
+            float positionY
+        )
+        {
+            GameObject clone = UnityEngine.Object.Instantiate(coin);
+            new Object.Item.Coin(clone).ChangePosition(
+                new Vector3(
+                    Random.Range(randamRangeMinX, randamRangeMaxX),
+                    positionY,
+                    0
+                )
+            );
         }
 
         Rigidbody rigidbody;

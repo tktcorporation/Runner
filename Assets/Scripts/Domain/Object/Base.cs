@@ -4,6 +4,11 @@ namespace Object
 {
     public class Base
     {
+        public static GameObject GetPrefab(string path)
+        {
+            return Resources.Load<GameObject>(path);
+        }
+
         public Transform transform;
         //Collider collider;
         //Rigidbody rigidbody;
