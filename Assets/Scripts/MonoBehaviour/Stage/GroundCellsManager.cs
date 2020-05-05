@@ -16,13 +16,19 @@ namespace Stage
         {
             cell = Object.Base.GetPrefab(prefabPath);
             StartCoroutine(
-                Object.Stage.GroundCell.GeneratePerInteravlByProbabilities(
+                Object.Base.LoopActionWithIntervalAndStartPositionX(
+                    (positionX) => Object.Base.ActionByProbabilities(
+                        probabilitiesPercentage,
+                        () => Object.Stage.GroundCell.Generate(
+                            cell,
+                            scale,
+                            positionX,
+                            positionY
+                        )
+                    ),
                     intervalSeconds,
-                    probabilitiesPercentage,
-                    cell,
-                    scale,
-                    startPositionX,
-                    positionY
+                    scale.x,
+                    startPositionX
                 )
             );
         }

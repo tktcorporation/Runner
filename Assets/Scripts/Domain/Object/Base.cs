@@ -11,7 +11,7 @@ namespace Object
             return Resources.Load<GameObject>(path);
         }
         public static IEnumerator LoopActionWithIntervalAndStartPositionX(
-            Action action,
+            Action<float> action,
             float intervalSeconds,
             float xAddingPerAction,
             float startPositionX
@@ -21,7 +21,7 @@ namespace Object
             while (true)
             {
                 yield return new WaitForSeconds(intervalSeconds);
-                action();
+                action(putPositionX);
                 putPositionX += xAddingPerAction;
             }
         }
