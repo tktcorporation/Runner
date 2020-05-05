@@ -20,7 +20,7 @@ public class CoinsManager : MonoBehaviour
     void Generate()
     {
         GameObject clone = Instantiate(coin);
-        new Item.Coin(clone).ChangePosition(
+        new Object.Item.Coin(clone).ChangePosition(
             new Vector3(
                 Random.Range(randamRangeMin, randamRangeMax),
                 generateHeight,
@@ -32,7 +32,7 @@ public class CoinsManager : MonoBehaviour
     // LifeCycle Methods
     void Start()
     {
-        coin = Item.Coin.GetPrefab(prefabPath);
+        coin = Object.Item.Coin.GetPrefab(prefabPath);
         StartCoroutine(Generating());
     }
 }

@@ -2,11 +2,11 @@
 
 public class CoinController : MonoBehaviour
 {
-    public Item.Coin coin;
+    public Object.Item.Coin coin;
 
     void Start()
     {
-        coin = new Item.Coin(transform, GetComponent<Rigidbody>(), -100);
+        coin = new Object.Item.Coin(transform, GetComponent<Rigidbody>(), -100);
         coin.AddAngularVelocityToX(2f);
     }
 
