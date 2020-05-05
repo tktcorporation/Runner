@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-namespace Item
+namespace Object.Item
 {
     public class Coin : Base
     {
