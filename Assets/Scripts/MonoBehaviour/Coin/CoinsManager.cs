@@ -33,6 +33,6 @@ public class CoinsManager : MonoBehaviour
     void Start()
     {
         coin = Item.Coin.GetPrefab(prefabPath);
-        StartCoroutine("Generating");
+        StartCoroutine(Generating());
     }
 }

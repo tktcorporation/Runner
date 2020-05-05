@@ -1,17 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 public class Manager : MonoBehaviour
 {
     public static StatusMap status;
-    public static int points;
+    public static GameSystem.Score score;
     static GameOverCanvas gameOverCanvas;
     public GameObject playerObject;
     Player.Base player;
     Failing.Controller failController;
+    static GameSystem.Scene scene;
 
     public static void GameOver()
     {
@@ -20,15 +17,10 @@ public class Manager : MonoBehaviour
     }
     static void Retry()
     {
-        WaitForLoadScene(ScenesMap.Main);
-        status = StatusMap.playing;
         Destroy(gameOverCanvas.obj);
-    }
-
-    static IEnumerator WaitForLoadScene(string sceneName)
-    {
-        //シーンを非同期で読込し、読み込まれるまで待機する
-        yield return SceneManager.LoadSceneAsync(sceneName);
+        scene = new GameSystem.Scene(GameSystem.Scene.ScenesMap.Main);
+        score = new GameSystem.Score();
+        status = StatusMap.playing;
     }
 
     void PlayerFailCheck()
@@ -41,21 +33,10 @@ public class Manager : MonoBehaviour
         Manager.GameOver();
     }
 
-    public static int AddPoints(int num)
-    {
-        points += num;
-        return points;
-    }
-
     public enum StatusMap
     {
         playing = 0,
         overed = 1
-    }
-
-    class ScenesMap
-    {
-        public static string Main = "MainScene";
     }
 
     // LifeCycle Methods
@@ -63,7 +44,7 @@ public class Manager : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
         status = StatusMap.playing;
-        points = 0;
+        score = new GameSystem.Score();
         player = new Player.Base(playerObject.transform, playerObject.GetComponent<Rigidbody>());
         failController = new Failing.Controller(player, -100f);
     }

@@ -15,7 +15,7 @@ public class CoinController : MonoBehaviour
         if (!other.gameObject.CompareTag("Player"))
             return;
         Destroy(gameObject);
-        Manager.AddPoints(1);
+        Manager.score.AddCoinPoints(1);
     }
 
     private void LateUpdate()

@@ -10,6 +10,6 @@ public class PointsTextController : MonoBehaviour
     }
     void LateUpdate()
     {
-        pointsText.updateText(Manager.points.ToString());
+        pointsText.updateText(Manager.score.coinPoints.ToString());
     }
 }
