@@ -14,12 +14,14 @@ public class CoinsManager : MonoBehaviour
     {
         coin = Object.Item.Coin.GetPrefab(prefabPath);
         StartCoroutine(
-            Object.Item.Coin.GeneratePerInteravl(
+            Object.Base.LoopActionWithInterval(
                 generateInterval,
-                coin,
-                randamRangeMin,
-                randamRangeMax,
-                generateHeight
+                () => Object.Item.Coin.Generate(
+                    coin,
+                    randamRangeMin,
+                    randamRangeMax,
+                    generateHeight
+                )
             )
         );
     }

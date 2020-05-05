@@ -5,26 +5,7 @@ namespace Object.Item
 {
     public class Coin : Base
     {
-        public static IEnumerator GeneratePerInteravl(
-            float intervalSeconds,
-            GameObject coin,
-            float randamRangeMinX,
-            float randamRangeMaxX,
-            float positionY
-         )
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(intervalSeconds);
-                Generate(
-                    coin,
-                    randamRangeMinX,
-                    randamRangeMaxX,
-                    positionY
-                );
-            }
-        }
-        static void Generate(
+        public static void Generate(
             GameObject coin,
             float randamRangeMinX,
             float randamRangeMaxX,
