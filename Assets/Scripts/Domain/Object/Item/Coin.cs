@@ -7,15 +7,14 @@ namespace Object.Item
     {
         public static void Generate(
             GameObject coin,
-            float randamRangeMinX,
-            float randamRangeMaxX,
+            float positionX,
             float positionY
         )
         {
             GameObject clone = UnityEngine.Object.Instantiate(coin);
             new Object.Item.Coin(clone).ChangePosition(
                 new Vector3(
-                    Random.Range(randamRangeMinX, randamRangeMaxX),
+                    positionX,
                     positionY,
                     0
                 )
