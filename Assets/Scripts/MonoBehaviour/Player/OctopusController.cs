@@ -20,6 +20,8 @@ public class OctopusController : MonoBehaviour
     }
     void FixedUpdate()
     {
+        if (Manager.status == Manager.StatusMap.overed)
+            return;
         octopus.Run(Input.GetAxis("Horizontal"));
         octopus.Jump(Input.GetKeyDown(KeyCode.Space));
     }

@@ -31,4 +31,9 @@ public class CoinsManager : MonoBehaviour
             )
         );
     }
+    private void LateUpdate()
+    {
+        if (Manager.status == Manager.StatusMap.overed)
+            StopAllCoroutines();
+    }
 }
