@@ -32,6 +32,17 @@ namespace Stage
                 )
             );
         }
+        void OnCollisionExit(Collision other)
+        {
+            if (!other.gameObject.CompareTag("Player"))
+                return;
+            Destroy(gameObject);
+        }
+        private void LateUpdate()
+        {
+            if (Manager.status == Manager.StatusMap.overed)
+                StopAllCoroutines();
+        }
     }
 }
 
