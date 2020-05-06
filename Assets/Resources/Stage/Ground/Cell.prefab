@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 7008320163410914448}
   - component: {fileID: 8798998226124338381}
   - component: {fileID: 732177781370924585}
+  - component: {fileID: -7066654332429714873}
   m_Layer: 0
-  m_Name: GroundCell
+  m_Name: Cell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -93,3 +94,15 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-7066654332429714873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7293392299787825535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34e610226d4334a49bffb59e0cee3b3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
