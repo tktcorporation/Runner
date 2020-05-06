@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Manager : MonoBehaviour
 {
@@ -8,8 +9,11 @@ public class Manager : MonoBehaviour
     public GameObject playerObject;
     Player.Base player;
     Failing.Controller failController;
-    static GameSystem.Scene scene;
 
+    public static void ManagerAction(Action action)
+    {
+        action();
+    }
     public static void GameOver()
     {
         status = StatusMap.overed;
@@ -18,7 +22,7 @@ public class Manager : MonoBehaviour
     static void Retry()
     {
         Destroy(gameOverCanvas.obj);
-        scene = new GameSystem.Scene(GameSystem.Scene.ScenesMap.Main);
+        GameSystem.Scene.BuildWithLoadSceneAsync(GameSystem.Scene.ScenesMap.Main);
         score = new GameSystem.Score();
         status = StatusMap.playing;
     }
