@@ -10,7 +10,7 @@ namespace GameSystem
         //    return SceneManager.LoadSceneAsync(sceneName.Value);
         //}
 
-        static IEnumerator WaitForLoadScene(ScenesMap sceneName)
+        static IEnumerator LoadSceneAsync(ScenesMap sceneName)
         {
             yield return SceneManager.LoadSceneAsync(sceneName.Value);
         }
@@ -22,13 +22,22 @@ namespace GameSystem
         {
             yield return SceneManager.UnloadSceneAsync(sceneName.Value);
         }
+        public static Scene BuildWithLoadSceneAsync(ScenesMap sceneName)
+        {
+            LoadSceneAsync(sceneName);
+            return new Scene(sceneName);
+        }
+        public static Scene BuildWithLoadScene(ScenesMap sceneName)
+        {
+            LoadScene(sceneName);
+            return new Scene(sceneName);
+        }
 
         public ScenesMap scene { get; private set; }
 
-        public Scene(ScenesMap sceneName)
+        Scene(ScenesMap sceneName)
         {
             scene = sceneName;
-            WaitForLoadScene(sceneName);
         }
 
         public void WaitForUnload()
@@ -43,6 +52,7 @@ namespace GameSystem
             public string Value { get; private set; }
 
             public static ScenesMap Main { get { return new ScenesMap("MainScene"); } }
+            public static ScenesMap Title { get { return new ScenesMap("TitleScene"); } }
         }
     }
 }
