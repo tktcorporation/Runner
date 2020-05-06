@@ -21,7 +21,6 @@ namespace UI
         }
         Button GetFirstButton()
         {
-            Debug.Log(GetButtons()[0]);
             return GetButtons()[0];
         }
         Button[] GetButtons()
