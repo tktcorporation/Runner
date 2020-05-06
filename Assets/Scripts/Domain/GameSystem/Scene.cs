@@ -5,12 +5,7 @@ namespace GameSystem
 {
     public class Scene
     {
-        //static UnityEngine.AsyncOperation WaitForLoadScene(ScenesMap sceneName)
-        //{
-        //    return SceneManager.LoadSceneAsync(sceneName.Value);
-        //}
-
-        static IEnumerator LoadSceneAsync(ScenesMap sceneName)
+        public static IEnumerator LoadSceneAsync(ScenesMap sceneName)
         {
             yield return SceneManager.LoadSceneAsync(sceneName.Value);
         }
@@ -21,11 +16,6 @@ namespace GameSystem
         static IEnumerator WaitForUnload(ScenesMap sceneName)
         {
             yield return SceneManager.UnloadSceneAsync(sceneName.Value);
-        }
-        public static Scene BuildWithLoadSceneAsync(ScenesMap sceneName)
-        {
-            LoadSceneAsync(sceneName);
-            return new Scene(sceneName);
         }
         public static Scene BuildWithLoadScene(ScenesMap sceneName)
         {
