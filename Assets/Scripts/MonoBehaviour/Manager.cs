@@ -24,8 +24,8 @@ public class Manager : MonoBehaviour
     {
         Destroy(gameOverCanvas.obj);
         GameSystem.Scene.BuildWithLoadScene(GameSystem.Scene.ScenesMap.Main);
-        score = new GameSystem.Score();
         player = new Player.Base(playerObject.transform, playerObject.GetComponent<Rigidbody>());
+        score = new GameSystem.Score(new GameSystem.Points.Distance(new Vector3(0, 0, 0), playerObject.transform));
         failController = new Failing.Controller(player, -100f);
         status = StatusMap.playing;
     }
@@ -36,8 +36,8 @@ public class Manager : MonoBehaviour
             return;
         if (Manager.status == Manager.StatusMap.overed)
             return;
-        player.ChangePosition(OctopusController.startPosition);
         GameOver();
+        player.ChangePosition(OctopusController.startPosition);
     }
 
     public enum StatusMap
@@ -50,13 +50,14 @@ public class Manager : MonoBehaviour
     void Start()
     {
         status = StatusMap.playing;
-        score = new GameSystem.Score();
+        score = new GameSystem.Score(new GameSystem.Points.Distance(new Vector3(0, 0, 0), playerObject.transform));
         player = new Player.Base(playerObject.transform, playerObject.GetComponent<Rigidbody>());
         failController = new Failing.Controller(player, -100f);
         GameSystem.Score.GetHighest5();
     }
     private void LateUpdate()
     {
+        score.distancePoints.UpdatePoints();
         PlayerFailCheck();
     }
 }

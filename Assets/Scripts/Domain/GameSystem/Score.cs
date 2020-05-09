@@ -6,10 +6,14 @@ namespace GameSystem
     {
         static List<int> scoreHistories = new List<int>();
         public int coinPoints { get; private set; } = 0;
+        public Points.Distance distancePoints { get; private set; }
 
-        public Score() { }
-        public Score(int initialCoinPoints) {
+        public Score(Points.Distance distancePoints) {
+            this.distancePoints = distancePoints;
+        }
+        public Score(int initialCoinPoints, Points.Distance distancePoints) {
             this.coinPoints = initialCoinPoints;
+            this.distancePoints = distancePoints;
         }
         public int AddCoinPoints(int value)
         {
@@ -17,9 +21,9 @@ namespace GameSystem
             return this.coinPoints;
         }
         public void SavaToHistories()
-        {
-            scoreHistories.Add(coinPoints);
-        }
+            => scoreHistories.Add(GetTotalPoints());
+        public int GetTotalPoints()
+            => coinPoints + distancePoints.GetPoints();
         public static List<int> GetHighest5()
         {
             scoreHistories.Sort();
