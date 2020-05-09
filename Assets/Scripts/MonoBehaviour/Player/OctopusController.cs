@@ -13,7 +13,7 @@ public class OctopusController : MonoBehaviour
         octopus = new Player.Octopus(
             transform,
             GetComponent<Rigidbody>(),
-            new Running.ForceMap(70, 30, 27),
+            new Running.ForceMap(100, 40, 27),
             new Jumping.ForceMap(2500f, 10f)
         );
         octopus.ChangePosition(startPosition);
