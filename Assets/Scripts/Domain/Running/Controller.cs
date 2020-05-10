@@ -17,6 +17,10 @@ namespace Running
 
         public void Move(float moveHorizontal)
         {
+            if (moveHorizontal > 1)
+                moveHorizontal = 1;
+            if (moveHorizontal < -1)
+                moveHorizontal = -1;
             Vector2 movement = new Vector2(moveHorizontal, 0.0f);
             if (IsOverMaxSpeed())
                 player.rigidbody.AddForce(movement * forceMap.Force);

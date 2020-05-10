@@ -5,6 +5,8 @@ using UnityEngine;
 public class OctopusController : MonoBehaviour
 {
     public static Vector3 startPosition = new Vector3(0, 3, 0);
+    public DynamicJoystick joystick;
+    public ButtonState jumpButton;
     Player.Octopus octopus;
 
     // Life cycle method
@@ -22,7 +24,7 @@ public class OctopusController : MonoBehaviour
     {
         if (Manager.status == Manager.StatusMap.overed)
             return;
-        octopus.Run(Input.GetAxis("Horizontal"));
-        octopus.Jump(Input.GetKeyDown(KeyCode.Space));
+        octopus.Run(Input.GetAxis("Horizontal") + joystick.Horizontal);
+        octopus.Jump(Input.GetKeyDown(KeyCode.Space) | jumpButton.IsDown());
     }
 }
