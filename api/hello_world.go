@@ -21,7 +21,7 @@ func HelloHTTP(w http.ResponseWriter, r *http.Request) {
 		ctx := context.Background()
 		projectID := os.Getenv("PROJECT_ID")
 		writeResult := new(repositories.UsersRepository).Add(ctx, projectID)
-		fmt.Fprint(w, writeResult.UpdateTime)
+		fmt.Fprint(w, projectID+": "+writeResult.UpdateTime.String())
 		return
 	}
 	if d.Name == "" {
