@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  go:
+    image: tktcorporation/google-cloud-sdk-golang:291.0-go1.13
+    working_dir: /go/src/github.com/tktcorporation/Runner
+    volumes:
+      - .:/go/src/github.com/tktcorporation/Runner
+    environment:
+      - PROJECT_ID=tacoron
