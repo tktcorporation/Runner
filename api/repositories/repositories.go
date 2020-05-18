@@ -6,7 +6,8 @@ import (
 	"log"
 
 	"cloud.google.com/go/firestore"
-	firebase "firebase.google.com/go"
+	firestoreconf "github.com/tktcorporation/Runner/firestore"
+	score "github.com/tktcorporation/Runner/score"
 	"google.golang.org/api/iterator"
 )
 
@@ -24,8 +25,8 @@ type Repository interface {
 type UsersRepository struct{}
 
 // Add is a func for adding
-func (arg *UsersRepository) Add(ctx context.Context, projectID string) *firestore.WriteResult {
-	return dispatchFirestoreAddResult(ctx, projectID, add)
+func (arg *UsersRepository) Add(ctx context.Context, projectID string, score score.Score) *firestore.WriteResult {
+	return dispatchFirestoreAddResult(ctx, projectID, score, add)
 }
 
 // Rdd is a func for reading
@@ -33,12 +34,8 @@ func (arg *UsersRepository) Read(ctx context.Context, projectID string) ([]*fire
 	return dispatchFirestoreReadResult(ctx, projectID, read)
 }
 
-func add(ctx context.Context, client firestore.Client) *firestore.WriteResult {
-	var _, result, err = client.Collection("users").Add(ctx, map[string]interface{}{
-		"first": "Ada",
-		"last":  "Lovelace",
-		"born":  1815,
-	})
+func add(ctx context.Context, client firestore.Client, score score.Score) *firestore.WriteResult {
+	var _, result, err = client.Collection("scores").Add(ctx, score)
 	if err != nil {
 		log.Fatalf("Failed adding alovelace: %v", err)
 	}
@@ -46,7 +43,7 @@ func add(ctx context.Context, client firestore.Client) *firestore.WriteResult {
 }
 
 func read(ctx context.Context, client *firestore.Client) ([]*firestore.DocumentSnapshot, error) {
-	iter := client.Collection("users").Documents(ctx)
+	iter := client.Collection("scores").Documents(ctx)
 	// result := make(map[string]interface{})
 	for {
 		doc, err := iter.Next()
@@ -63,30 +60,18 @@ func read(ctx context.Context, client *firestore.Client) ([]*firestore.DocumentS
 
 func dispatchFirestoreAddResult(
 	ctx context.Context, projectID string,
-	fu func(ctx context.Context, client firestore.Client) *firestore.WriteResult,
+	score score.Score,
+	fu func(ctx context.Context, client firestore.Client, score score.Score) *firestore.WriteResult,
 ) *firestore.WriteResult {
-	client := getFirestoreClient(ctx, projectID)
+	client := firestoreconf.GetClient(ctx, projectID)
 	defer client.Close()
-	return fu(ctx, *client)
+	return fu(ctx, *client, score)
 }
 func dispatchFirestoreReadResult(
 	ctx context.Context, projectID string,
 	fu func(ctx context.Context, client *firestore.Client) ([]*firestore.DocumentSnapshot, error),
 ) ([]*firestore.DocumentSnapshot, error) {
-	client := getFirestoreClient(ctx, projectID)
+	client := firestoreconf.GetClient(ctx, projectID)
 	defer client.Close()
 	return fu(ctx, client)
-}
-
-var getFirestoreClient = func(ctx context.Context, projectID string) *firestore.Client {
-	conf := &firebase.Config{ProjectID: projectID}
-	app, err := firebase.NewApp(ctx, conf)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	client, err := app.Firestore(ctx)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	return client
 }

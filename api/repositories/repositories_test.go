@@ -4,13 +4,32 @@ import (
 	"context"
 	"os"
 	"testing"
+	"time"
+
+	firestoreconf "github.com/tktcorporation/Runner/firestore"
+	score "github.com/tktcorporation/Runner/score"
 )
 
 func TestRepository(t *testing.T) {
 
+	t.Run("add", func(t *testing.T) {
+		ctx := context.Background()
+		client := firestoreconf.GetClient(ctx, os.Getenv("PROJECT_ID"))
+		score := score.Score{
+			UserName: "test",
+			Points: score.Points{
+				OfDistance: 10,
+				OfCoin:     36,
+			},
+			Timestamp: time.Now().Unix(),
+		}
+		res := add(ctx, *client, score)
+		t.Logf("doc: %p", res)
+	})
+
 	t.Run("read", func(t *testing.T) {
 		ctx := context.Background()
-		client := getFirestoreClient(ctx, os.Getenv("PROJECT_ID"))
+		client := firestoreconf.GetClient(ctx, os.Getenv("PROJECT_ID"))
 		doc, err := read(ctx, client)
 		if err != nil {
 			t.Log(doc)

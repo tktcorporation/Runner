@@ -8,8 +8,10 @@ import (
 	"html"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/tktcorporation/Runner/repositories"
+	"github.com/tktcorporation/Runner/score"
 )
 
 // HelloHTTP is an HTTP Cloud Function with a request parameter.
@@ -20,7 +22,15 @@ func HelloHTTP(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewDecoder(r.Body).Decode(&d); err != nil {
 		ctx := context.Background()
 		projectID := os.Getenv("PROJECT_ID")
-		writeResult := new(repositories.UsersRepository).Add(ctx, projectID)
+		score := score.Score{
+			UserName: "admin",
+			Points: score.Points{
+				OfDistance: 10,
+				OfCoin:     36,
+			},
+			Timestamp: time.Now().Unix(),
+		}
+		writeResult := new(repositories.UsersRepository).Add(ctx, projectID, score)
 		fmt.Fprint(w, projectID+": "+writeResult.UpdateTime.String())
 		return
 	}
