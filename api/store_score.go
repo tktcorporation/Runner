@@ -13,8 +13,8 @@ import (
 	"github.com/tktcorporation/Runner/score"
 )
 
-// HelloHTTP is an HTTP Cloud Function with a request parameter.
-func HelloHTTP(w http.ResponseWriter, r *http.Request) {
+// StoreScoreHTTP is an HTTP Cloud Function with a request parameter.
+func StoreScoreHTTP(w http.ResponseWriter, r *http.Request) {
 	type Points struct {
 		OfDistance int `json:"of_distance"`
 		OfCoin     int `json:"of_coin"`
