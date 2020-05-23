@@ -23,6 +23,7 @@ func TestRepository(t *testing.T) {
 			},
 			Timestamp: time.Now().Unix(),
 		}
+		t.Logf("(%%#v) %#v\n", score)
 		res := add(ctx, *client, score)
 		t.Logf("doc: %p", res)
 	})
