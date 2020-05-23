@@ -35,7 +35,7 @@ func StoreScoreHTTP(w http.ResponseWriter, r *http.Request) {
 	writeResult := new(repositories.UsersRepository).Add(
 		ctx,
 		projectID,
-		score.Create("admin", score.Points{
+		score.Create(d.UserName, score.Points{
 			OfDistance: d.Points.OfDistance,
 			OfCoin:     d.Points.OfCoin,
 		}),
