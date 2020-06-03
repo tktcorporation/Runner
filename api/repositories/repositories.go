@@ -2,13 +2,13 @@ package repositories
 
 import (
 	"context"
-	"fmt"
+	"encoding/json"
 	"log"
+	"strconv"
 
 	"cloud.google.com/go/firestore"
 	firestoreconf "github.com/tktcorporation/Runner/firestore"
 	score "github.com/tktcorporation/Runner/score"
-	"google.golang.org/api/iterator"
 )
 
 // Repository is for using firestore
@@ -22,16 +22,19 @@ type Repository interface {
 // }
 
 // UsersRepository is for using firestore users
-type UsersRepository struct{}
+type UsersRepository struct {
+	Context   context.Context
+	ProjectID string
+}
 
 // Add is a func for adding
-func (arg *UsersRepository) Add(ctx context.Context, projectID string, score score.Score) *firestore.WriteResult {
-	return dispatchFirestoreAddResult(ctx, projectID, score, add)
+func (arg *UsersRepository) Add(score score.Score) *firestore.WriteResult {
+	return dispatchFirestoreAddResult(arg.Context, arg.ProjectID, score, add)
 }
 
 // Rdd is a func for reading
-func (arg *UsersRepository) Read(ctx context.Context, projectID string) ([]*firestore.DocumentSnapshot, error) {
-	return dispatchFirestoreReadResult(ctx, projectID, read)
+func (arg *UsersRepository) Read() []score.Score {
+	return dispatchFirestoreReadResult(arg.Context, arg.ProjectID, read)
 }
 
 func add(ctx context.Context, client firestore.Client, score score.Score) *firestore.WriteResult {
@@ -42,20 +45,45 @@ func add(ctx context.Context, client firestore.Client, score score.Score) *fires
 	return result
 }
 
-func read(ctx context.Context, client *firestore.Client) ([]*firestore.DocumentSnapshot, error) {
+func read(ctx context.Context, client *firestore.Client) (result []score.Score) {
+
 	iter := client.Collection("scores").Documents(ctx)
-	// result := make(map[string]interface{})
-	for {
-		doc, err := iter.Next()
-		if err == iterator.Done {
-			break
-		}
-		if err != nil {
-			log.Fatalf("Failed to iterate: %v", err)
-		}
-		fmt.Println(doc.Data())
+	docs, err := iter.GetAll()
+	if err != nil {
+		log.Fatalf("Failed to Get Documents: %v", err)
 	}
-	return iter.GetAll()
+
+	for _, v := range docs {
+		score, err := MapToStruct(v.Data())
+		if err != nil {
+			log.Fatalf("UnquoteError: %#v", err)
+		}
+		// log.Printf("data: %#v", v.Data())
+		// log.Printf("scoreStruct: %#v", scoreStruct)
+		result = append(result, score)
+	}
+	return result
+}
+
+// MapToStruct convert map to struct
+func MapToStruct(m map[string]interface{}) (score.Score, error) {
+	var sco score.Score
+	tmp, err := json.Marshal(m)
+	if err != nil {
+		return sco, err
+	}
+	log.Printf("Marshaledjson: %#v", string(tmp))
+	s, err := strconv.Unquote("`" + string(tmp) + "`")
+	log.Printf("Unquote: %s", s)
+	if err != nil {
+		return sco, err
+	}
+	err = json.Unmarshal([]byte(s), &sco)
+	log.Printf("UnMarshaledjson: %#v", sco)
+	if err != nil {
+		return sco, err
+	}
+	return sco, nil
 }
 
 func dispatchFirestoreAddResult(
@@ -69,8 +97,8 @@ func dispatchFirestoreAddResult(
 }
 func dispatchFirestoreReadResult(
 	ctx context.Context, projectID string,
-	fu func(ctx context.Context, client *firestore.Client) ([]*firestore.DocumentSnapshot, error),
-) ([]*firestore.DocumentSnapshot, error) {
+	fu func(ctx context.Context, client *firestore.Client) []score.Score,
+) []score.Score {
 	client := firestoreconf.GetClient(ctx, projectID)
 	defer client.Close()
 	return fu(ctx, client)

@@ -7,26 +7,29 @@ import (
 )
 
 func TestScore(t *testing.T) {
+	ofDistance := 10
+	ofCoin := 15
+	userName := "test"
 
 	t.Run("read", func(t *testing.T) {
-		score := Create("test", Points{
-			OfCoin:     10,
-			OfDistance: 10,
+		score := Create(userName, Points{
+			OfCoin:     &ofCoin,
+			OfDistance: &ofDistance,
 		})
 
-		assert.Equal(t, 10, score.Points.OfCoin)
-		assert.Equal(t, 10, score.Points.OfCoin)
-		assert.Equal(t, "test", score.UserName)
+		assert.Equal(t, ofCoin, *score.Points.OfCoin)
+		assert.Equal(t, ofDistance, *score.Points.OfDistance)
+		assert.Equal(t, "test", *score.UserName)
 	})
 
 	t.Run("Create", func(t *testing.T) {
-		score := Create("test", Points{
-			OfCoin:     10,
-			OfDistance: 10,
+		score := Create(userName, Points{
+			OfCoin:     &ofCoin,
+			OfDistance: &ofDistance,
 		})
 		t.Logf("(%%#v) %#v\n", score)
-		assert.Equal(t, 10, score.Points.OfCoin)
-		assert.Equal(t, 10, score.Points.OfCoin)
-		assert.Equal(t, "test", score.UserName)
+		assert.Equal(t, ofCoin, *score.Points.OfCoin)
+		assert.Equal(t, ofDistance, *score.Points.OfDistance)
+		assert.Equal(t, "test", *score.UserName)
 	})
 }
