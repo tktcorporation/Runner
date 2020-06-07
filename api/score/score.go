@@ -10,7 +10,7 @@ type Points struct {
 
 // Score is a struct for storing a Score
 type Score struct {
-	UserName  *string `json:"username"`
+	UserName  *string `json:"user_name"`
 	Points    *Points `json:"points"`
 	Timestamp *int64  `json:"timestamp"`
 }
