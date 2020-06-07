@@ -32,7 +32,7 @@ func (arg *UsersRepository) Add(score score.Score) *firestore.WriteResult {
 	return dispatchFirestoreAddResult(arg.Context, arg.ProjectID, score, add)
 }
 
-// Rdd is a func for reading
+// Read fetch all scores data
 func (arg *UsersRepository) Read() []score.Score {
 	return dispatchFirestoreReadResult(arg.Context, arg.ProjectID, read)
 }
@@ -72,14 +72,11 @@ func MapToStruct(m map[string]interface{}) (score.Score, error) {
 	if err != nil {
 		return sco, err
 	}
-	log.Printf("Marshaledjson: %#v", string(tmp))
 	s, err := strconv.Unquote("`" + string(tmp) + "`")
-	log.Printf("Unquote: %s", s)
 	if err != nil {
 		return sco, err
 	}
 	err = json.Unmarshal([]byte(s), &sco)
-	log.Printf("UnMarshaledjson: %#v", sco)
 	if err != nil {
 		return sco, err
 	}
