@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"encoding/json"
 	"os"
 	"testing"
 
@@ -32,14 +33,22 @@ func TestRepository(t *testing.T) {
 		t.Logf("doclength: %d", len(docs))
 		t.Logf("docs: %p", docs)
 		t.Logf("doc: %#v", docs[0])
+		t.Logf("doc: %#v", *docs[0].UserName)
+		t.Logf("doc: %#v", *docs[0].Points)
+	})
 
-		// t.Logf("Score.Points.OfCoin: %d", *docs[0].Points.OfCoin)
-		// t.Logf("Score.Points.OfDistance: %d", *docs[0].Points.OfDistance)
-		// t.Logf("Score.UserName: %s", *docs[0].UserName)
-
-		// assert.Equal(t, ofCoin, *docs[0].Points.OfCoin)
-		// assert.Equal(t, ofDistance, *docs[0].Points.OfDistance)
-		// assert.Equal(t, userName, *docs[0].UserName)
+	t.Run("Read", func(t *testing.T) {
+		usersRepo := &UsersRepository{
+			Context:   context.Background(),
+			ProjectID: os.Getenv("PROJECT_ID"),
+		}
+		scores := usersRepo.Read()
+		// t.Logf("json: %#v", scores)
+		// t.Logf("UserName: %#v", *scores[0].UserName)
+		// t.Logf("Points: %#v", *scores[0].Points)
+		// t.Logf("Timestamp: %#v", *scores[0].Timestamp)
+		scoresJSON, _ := json.Marshal(scores)
+		t.Logf("json: %#v", (string)(scoresJSON))
 	})
 
 	// t.Run("success NewUser()", func(t *testing.T) {
