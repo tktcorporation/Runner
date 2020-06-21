@@ -13,3 +13,5 @@ gcloud-login:
 	gcloud auth login
 gcloud-default-login:
 	gcloud auth application-default login
+test:
+	go test./...

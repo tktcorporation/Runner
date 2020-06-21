@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/tktcorporation/Runner/repositories"
-	"github.com/tktcorporation/Runner/score"
+	"github.com/tktcorporation/Runner/domain/score"
+	"github.com/tktcorporation/Runner/repository"
 )
 
 // StoreScoreHTTP is an HTTP Cloud Function with a request parameter.
@@ -30,15 +30,16 @@ func StoreScoreHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	ctx := context.Background()
 	projectID := os.Getenv("PROJECT_ID")
-	writeResult := (&repositories.UsersRepository{
-		Context:   ctx,
-		ProjectID: projectID,
-	}).Add(
+	re := repository.BuildScores(
+		ctx,
+		projectID,
+		false,
+	)
+	writeResult := re.Add(
 		score.Create(d.UserName, score.Points{
 			OfDistance: &d.Points.OfDistance,
 			OfCoin:     &d.Points.OfCoin,
 		}),
-		false,
 	)
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprint(w, projectID+": "+writeResult.UpdateTime.String())
@@ -58,11 +59,12 @@ func ReadScoreHTTP(w http.ResponseWriter, r *http.Request) {
 	// 	return
 	// }
 
-	usersRepo := &repositories.UsersRepository{
-		Context:   context.Background(),
-		ProjectID: os.Getenv("PROJECT_ID"),
-	}
-	scores := usersRepo.Read(false)
+	usersRepo := repository.BuildScores(
+		context.Background(),
+		os.Getenv("PROJECT_ID"),
+		false,
+	)
+	scores := usersRepo.Read()
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(scores)
 }

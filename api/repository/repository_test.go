@@ -1,4 +1,4 @@
-package repositories
+package repository
 
 import (
 	"context"
@@ -6,8 +6,7 @@ import (
 	"os"
 	"testing"
 
-	firestoreconf "github.com/tktcorporation/Runner/firestore"
-	score "github.com/tktcorporation/Runner/score"
+	score "github.com/tktcorporation/Runner/domain/score"
 )
 
 func TestRepository(t *testing.T) {
@@ -16,20 +15,20 @@ func TestRepository(t *testing.T) {
 	userName := "testandadminuser"
 	t.Run("add", func(t *testing.T) {
 		ctx := context.Background()
-		client := firestoreconf.GetClient(ctx, os.Getenv("PROJECT_ID"))
 		score := score.Create(userName, score.Points{
 			OfDistance: &ofDistance,
 			OfCoin:     &ofCoin,
 		})
 		t.Logf("(%%#v) %#v\n", score)
-		res := add(ctx, *client, score, true)
+		repo := BuildScores(ctx, os.Getenv("PROJECT_ID"), true)
+		res := repo.Add(score)
 		t.Logf("doc: %p", res)
 	})
 
 	t.Run("read", func(t *testing.T) {
 		ctx := context.Background()
-		client := firestoreconf.GetClient(ctx, os.Getenv("PROJECT_ID"))
-		docs := read(ctx, client, true)
+		repo := BuildScores(ctx, os.Getenv("PROJECT_ID"), true)
+		docs := repo.Read()
 		t.Logf("doclength: %d", len(docs))
 		t.Logf("docs: %p", docs)
 		t.Logf("doc: %#v", docs[0])
@@ -38,11 +37,9 @@ func TestRepository(t *testing.T) {
 	})
 
 	t.Run("Read", func(t *testing.T) {
-		usersRepo := &UsersRepository{
-			Context:   context.Background(),
-			ProjectID: os.Getenv("PROJECT_ID"),
-		}
-		scores := usersRepo.Read(true)
+		ctx := context.Background()
+		repo := BuildScores(ctx, os.Getenv("PROJECT_ID"), true)
+		scores := repo.Read()
 		// t.Logf("json: %#v", scores)
 		// t.Logf("UserName: %#v", *scores[0].UserName)
 		// t.Logf("Points: %#v", *scores[0].Points)
