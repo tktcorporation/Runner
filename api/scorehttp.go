@@ -14,13 +14,12 @@ import (
 
 // StoreScoreHTTP is an HTTP Cloud Function with a request parameter.
 func StoreScoreHTTP(w http.ResponseWriter, r *http.Request) {
-	type Points struct {
-		OfDistance int `json:"of_distance"`
-		OfCoin     int `json:"of_coin"`
-	}
 	var d struct {
 		UserName string `json:"user_name"`
-		Points   Points `json:"points"`
+		Points   struct {
+			OfDistance int `json:"of_distance"`
+			OfCoin     int `json:"of_coin"`
+		} `json:"points"`
 	}
 	err := json.NewDecoder(r.Body).Decode(&d)
 	if err != nil {
@@ -39,6 +38,7 @@ func StoreScoreHTTP(w http.ResponseWriter, r *http.Request) {
 			OfDistance: &d.Points.OfDistance,
 			OfCoin:     &d.Points.OfCoin,
 		}),
+		false,
 	)
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprint(w, projectID+": "+writeResult.UpdateTime.String())
@@ -62,7 +62,7 @@ func ReadScoreHTTP(w http.ResponseWriter, r *http.Request) {
 		Context:   context.Background(),
 		ProjectID: os.Getenv("PROJECT_ID"),
 	}
-	scores := usersRepo.Read()
+	scores := usersRepo.Read(false)
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(scores)
 }

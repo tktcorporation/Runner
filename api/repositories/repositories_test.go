@@ -13,7 +13,7 @@ import (
 func TestRepository(t *testing.T) {
 	ofDistance := 10
 	ofCoin := 15
-	userName := "test"
+	userName := "testandadminuser"
 	t.Run("add", func(t *testing.T) {
 		ctx := context.Background()
 		client := firestoreconf.GetClient(ctx, os.Getenv("PROJECT_ID"))
@@ -22,14 +22,14 @@ func TestRepository(t *testing.T) {
 			OfCoin:     &ofCoin,
 		})
 		t.Logf("(%%#v) %#v\n", score)
-		res := add(ctx, *client, score)
+		res := add(ctx, *client, score, true)
 		t.Logf("doc: %p", res)
 	})
 
 	t.Run("read", func(t *testing.T) {
 		ctx := context.Background()
 		client := firestoreconf.GetClient(ctx, os.Getenv("PROJECT_ID"))
-		docs := read(ctx, client)
+		docs := read(ctx, client, true)
 		t.Logf("doclength: %d", len(docs))
 		t.Logf("docs: %p", docs)
 		t.Logf("doc: %#v", docs[0])
@@ -42,7 +42,7 @@ func TestRepository(t *testing.T) {
 			Context:   context.Background(),
 			ProjectID: os.Getenv("PROJECT_ID"),
 		}
-		scores := usersRepo.Read()
+		scores := usersRepo.Read(true)
 		// t.Logf("json: %#v", scores)
 		// t.Logf("UserName: %#v", *scores[0].UserName)
 		// t.Logf("Points: %#v", *scores[0].Points)

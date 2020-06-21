@@ -8,7 +8,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	firestoreconf "github.com/tktcorporation/Runner/firestore"
-	score "github.com/tktcorporation/Runner/score"
+	"github.com/tktcorporation/Runner/score"
 )
 
 // Repository is for using firestore
@@ -28,26 +28,51 @@ type UsersRepository struct {
 }
 
 // Add is a func for adding
-func (arg *UsersRepository) Add(score score.Score) *firestore.WriteResult {
-	return dispatchFirestoreAddResult(arg.Context, arg.ProjectID, score, add)
+func (arg *UsersRepository) Add(score score.Score, isDev bool) *firestore.WriteResult {
+	return dispatchFirestoreAddResult(arg.Context, arg.ProjectID, score, isDev, add)
 }
 
 // Read fetch all scores data
-func (arg *UsersRepository) Read() []score.Score {
-	return dispatchFirestoreReadResult(arg.Context, arg.ProjectID, read)
+func (arg *UsersRepository) Read(isDev bool) []score.Score {
+	return dispatchFirestoreReadResult(arg.Context, arg.ProjectID, isDev, read)
 }
 
-func add(ctx context.Context, client firestore.Client, score score.Score) *firestore.WriteResult {
-	var _, result, err = client.Collection("scores").Add(ctx, score)
+func add(ctx context.Context, client firestore.Client, score score.Score, isDev bool) *firestore.WriteResult {
+	collection := scoreDev.String()
+	if !isDev {
+		collection = scorePrd.String()
+	}
+	var _, result, err = client.Collection(collection).Add(ctx, score)
 	if err != nil {
-		log.Fatalf("Failed adding alovelace: %v", err)
+		log.Fatalf("Failed adding doc to firestore: %v", err)
 	}
 	return result
 }
 
-func read(ctx context.Context, client *firestore.Client) (result []score.Score) {
+type collection int
 
-	iter := client.Collection("scores").Documents(ctx)
+const (
+	scorePrd collection = iota
+	scoreDev
+)
+
+func (c collection) String() string {
+	switch c {
+	case scorePrd:
+		return "scores"
+	case scoreDev:
+		return "scores_dev"
+	default:
+		return "unknown"
+	}
+}
+
+func read(ctx context.Context, client *firestore.Client, isDev bool) (result []score.Score) {
+	collection := scoreDev.String()
+	if !isDev {
+		collection = scorePrd.String()
+	}
+	iter := client.Collection(collection).OrderBy("total_point", firestore.Desc).Limit(10).Documents(ctx)
 	docs, err := iter.GetAll()
 	if err != nil {
 		log.Fatalf("Failed to Get Documents: %v", err)
@@ -85,18 +110,18 @@ func MapToStruct(m map[string]interface{}) (score.Score, error) {
 
 func dispatchFirestoreAddResult(
 	ctx context.Context, projectID string,
-	score score.Score,
-	fu func(ctx context.Context, client firestore.Client, score score.Score) *firestore.WriteResult,
+	score score.Score, isDev bool,
+	fu func(ctx context.Context, client firestore.Client, score score.Score, isDev bool) *firestore.WriteResult,
 ) *firestore.WriteResult {
 	client := firestoreconf.GetClient(ctx, projectID)
 	defer client.Close()
-	return fu(ctx, *client, score)
+	return fu(ctx, *client, score, isDev)
 }
 func dispatchFirestoreReadResult(
-	ctx context.Context, projectID string,
-	fu func(ctx context.Context, client *firestore.Client) []score.Score,
+	ctx context.Context, projectID string, isDev bool,
+	fu func(ctx context.Context, client *firestore.Client, isDev bool) []score.Score,
 ) []score.Score {
 	client := firestoreconf.GetClient(ctx, projectID)
 	defer client.Close()
-	return fu(ctx, client)
+	return fu(ctx, client, isDev)
 }

@@ -9,7 +9,7 @@ import (
 func TestScore(t *testing.T) {
 	ofDistance := 10
 	ofCoin := 15
-	userName := "test"
+	userName := "testandadminuser"
 
 	t.Run("read", func(t *testing.T) {
 		score := Create(userName, Points{
@@ -19,7 +19,7 @@ func TestScore(t *testing.T) {
 
 		assert.Equal(t, ofCoin, *score.Points.OfCoin)
 		assert.Equal(t, ofDistance, *score.Points.OfDistance)
-		assert.Equal(t, "test", *score.UserName)
+		assert.Equal(t, "testandadminuser", *score.UserName)
 	})
 
 	t.Run("Create", func(t *testing.T) {
@@ -30,6 +30,6 @@ func TestScore(t *testing.T) {
 		t.Logf("(%%#v) %#v\n", score)
 		assert.Equal(t, ofCoin, *score.Points.OfCoin)
 		assert.Equal(t, ofDistance, *score.Points.OfDistance)
-		assert.Equal(t, "test", *score.UserName)
+		assert.Equal(t, "testandadminuser", *score.UserName)
 	})
 }
