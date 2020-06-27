@@ -16,13 +16,6 @@ type ScoresRepository struct {
 	base Repository
 }
 
-// // ScoresRepository for scores
-// type ScoresRepository interface {
-// 	Add(score score.Score) *firestore.WriteResult
-// 	Read()
-// 	Close()
-// }
-
 func BuildScores(ctx context.Context, projectID string, isDev bool) ScoresRepository {
 	repo := Build(ctx, projectID, isDev, getCollectionName(isDev))
 	return ScoresRepository{repo}

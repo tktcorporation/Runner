@@ -9,6 +9,12 @@ public class Manager : MonoBehaviour
     public GameObject playerObject;
     static Player.Base player;
     static Failing.Controller failController;
+    public static string _name { get; private set; } = "tarou";
+
+    public static void ChangeName(string name)
+    {
+        _name = name;
+    }
 
     public static void ManagerAction(Action action)
     {
