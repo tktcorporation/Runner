@@ -3,7 +3,6 @@ using UniRx;
 
 public class GlobalHighScoresController : MonoBehaviour
 {
-    public string domain = "asia-northeast1-tacoron.cloudfunctions.net";
     static string HighScoreHistoryCellPath = "UI/HighScoreHistoryCell";
     static void CreateGlobalHighScores(Transform transform, ScoreHttp.Scores scores)
     {
@@ -19,7 +18,7 @@ public class GlobalHighScoresController : MonoBehaviour
     }
     async void Start()
     {
-        ScoreHttp scoreHttp = new ScoreHttp(domain);
+        ScoreHttp scoreHttp = new ScoreHttp();
         ScoreHttp.Scores result = await Observable.FromCoroutine<ScoreHttp.Scores>(observer => scoreHttp.GET(observer));
         CreateGlobalHighScores(transform, result);
     }
