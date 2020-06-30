@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html"
+	"log"
 	"net/http"
 	"os"
 
@@ -21,8 +22,10 @@ func StoreScoreHTTP(w http.ResponseWriter, r *http.Request) {
 			OfCoin     int `json:"of_coin"`
 		} `json:"points"`
 	}
+	log.Printf("body: %v", *r.Body)
 	err := json.NewDecoder(r.Body).Decode(&d)
 	if err != nil {
+		log.Fatalf(err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		w.Header().Set("Content-Type", "application/json")
 		fmt.Fprintf(w, "Bad Request received!: %s", html.EscapeString(err.Error()))
@@ -64,7 +67,9 @@ func ReadScoreHTTP(w http.ResponseWriter, r *http.Request) {
 		os.Getenv("PROJECT_ID"),
 		false,
 	)
-	scores := usersRepo.Read()
+
+	s := usersRepo.Read()
+	scores := score.Scores{Items: &s}
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(scores)
 }
