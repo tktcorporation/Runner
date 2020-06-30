@@ -22,7 +22,7 @@ func StoreScoreHTTP(w http.ResponseWriter, r *http.Request) {
 			OfCoin     int `json:"of_coin"`
 		} `json:"points"`
 	}
-	log.Printf("body: %v", *r.Body)
+	log.Printf("body: %v", r.Body)
 	err := json.NewDecoder(r.Body).Decode(&d)
 	if err != nil {
 		log.Fatalf(err.Error())
