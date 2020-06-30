@@ -27,7 +27,6 @@ public class ScoreHttp
         }
         else
         {
-            Debug.Log(req.downloadHandler.text);
             this.scores = JsonConvert.DeserializeObject<Scores>(req.downloadHandler.text);
             Debug.Log(scores);
             observer.OnNext(scores);
@@ -37,8 +36,18 @@ public class ScoreHttp
 
     public IEnumerator Post(Scores.PostScore score)
     {
-        UnityWebRequest req = UnityWebRequest.Post($"{Url}/StoreScoreHTTP", JsonConvert.SerializeObject(score));
+        string scorestr = JsonConvert.SerializeObject(score);
+        Debug.Log(scorestr);
+        string url = $"{Url}/StoreScoreHTTP";
+
+        byte[] postData = System.Text.Encoding.UTF8.GetBytes(scorestr);
+        var req = new UnityWebRequest(url, "POST");
+        req.uploadHandler = new UploadHandlerRaw(postData);
+        req.downloadHandler = new DownloadHandlerBuffer();
+        req.SetRequestHeader("Content-Type", "application/json");
+
         yield return req.SendWebRequest();
+
         if (req.isNetworkError)
         {
             Debug.Log(req.error);
