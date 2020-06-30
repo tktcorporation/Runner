@@ -7,6 +7,6 @@ public class NameText : MonoBehaviour
 
     void Start()
     {
-        text.text = Manager._name;
+        text.text = Manager.playerName;
     }
 }

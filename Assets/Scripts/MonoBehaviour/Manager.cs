@@ -1,7 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UniRx;
-using Newtonsoft.Json;
 
 public class Manager : MonoBehaviour
 {
@@ -11,11 +9,11 @@ public class Manager : MonoBehaviour
     public GameObject playerObject;
     static Player.Base player;
     static Failing.Controller failController;
-    public static string _name { get; private set; } = "guest";
+    public static string playerName { get; private set; } = "guest";
 
     public static void ChangeName(string name)
     {
-        _name = name;
+        Manager.playerName = name;
     }
 
     public static void ManagerAction(Action action)
@@ -25,13 +23,12 @@ public class Manager : MonoBehaviour
     public void GameOver()
     {
         ScoreHttp.Scores.PostScore s = new ScoreHttp.Scores.PostScore(
-            this.name,
+            Manager.playerName,
             new ScoreHttp.Scores.Score.Points(
                 score.distancePoints.GetPoints(),
                 score.coinPoints
                 )
             );
-        Debug.Log(JsonConvert.SerializeObject(s));
         status = StatusMap.overed;
         score.SavaToHistories();
         gameOverCanvas = new GameOverCanvas(Instantiate(GameOverCanvas.GetPrefab()), Retry);
