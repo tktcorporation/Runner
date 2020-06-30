@@ -7,7 +7,6 @@ public class GlobalHighScoresController : MonoBehaviour
     static void CreateGlobalHighScores(Transform transform, ScoreHttp.Scores scores)
     {
         int i = 0;
-        Debug.Log(scores.items);
         scores.items.ForEach(
             (score) => {
                 GameObject obj = Instantiate(Resources.Load<GameObject>(HighScoreHistoryCellPath), transform);
