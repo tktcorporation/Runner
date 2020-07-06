@@ -44,24 +44,17 @@ func StoreScoreHTTP(w http.ResponseWriter, r *http.Request) {
 			OfCoin:     &d.Points.OfCoin,
 		}),
 	)
+	w.Header().Set("Access-Control-Allow-Origin", "https://tacoron.web.app")
+	w.Header().Add("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS, POST")
+	w.Header().Add("Access-Control-Allow-Headers", "Content-Type, authorization")
+	w.Header().Add("Content-Type", "application/json")
+	w.Header().Add("Access-Control-Expose-Headers", "ETag")
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprint(w, projectID+": "+writeResult.UpdateTime.String())
 }
 
 // ReadScoreHTTP is an HTTP Cloud Function with a request parameter.
 func ReadScoreHTTP(w http.ResponseWriter, r *http.Request) {
-	// var d struct {
-	// 	Limit    string `json:"limit"`
-	// 	OrderAsc bool   `json:"order_asc"`
-	// }
-	// err := json.NewDecoder(r.URL.Query()).Decode(&d)
-	// if err != nil {
-	// 	w.WriteHeader(http.StatusBadRequest)
-	// 	w.Header().Set("Content-Type", "application/json")
-	// 	fmt.Fprintf(w, "Bad Request received!: %s", html.EscapeString(err.Error()))
-	// 	return
-	// }
-
 	usersRepo := repository.BuildScores(
 		context.Background(),
 		os.Getenv("PROJECT_ID"),
@@ -70,6 +63,11 @@ func ReadScoreHTTP(w http.ResponseWriter, r *http.Request) {
 
 	s := usersRepo.Read()
 	scores := score.Scores{Items: &s}
+	w.Header().Set("Access-Control-Allow-Origin", "https://tacoron.web.app")
+	w.Header().Add("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS, POST")
+	w.Header().Add("Access-Control-Allow-Headers", "Content-Type, authorization")
+	w.Header().Add("Content-Type", "application/json")
+	w.Header().Add("Access-Control-Expose-Headers", "ETag")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(scores)
 }
