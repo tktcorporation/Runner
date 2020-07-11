@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UniRx;
 
 public class GlobalHighScoresController : MonoBehaviour
 {
@@ -18,7 +17,7 @@ public class GlobalHighScoresController : MonoBehaviour
     async void Start()
     {
         ScoreHttp scoreHttp = new ScoreHttp();
-        ScoreHttp.Scores result = await Observable.FromCoroutine<ScoreHttp.Scores>(observer => scoreHttp.GET(observer));
+        ScoreHttp.Scores result = await scoreHttp.GET();
         CreateGlobalHighScores(transform, result);
     }
 }

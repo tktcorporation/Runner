@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 public class ScoreHttp
 {
@@ -13,25 +14,20 @@ public class ScoreHttp
     {
     }
 
-    public IEnumerator GET(System.IObserver<Scores> observer)
+    public async Task<Scores> GET()
     {
         UnityWebRequest req = UnityWebRequest.Get($"{Url}/ReadScoreHTTP");
-        yield return req.SendWebRequest();
+        await req.SendWebRequest();
         if (req.isNetworkError)
         {
             Debug.Log(req.error);
         }
-        else if (req.isHttpError)
+        if (req.isHttpError)
         {
             Debug.Log(req.error);
         }
-        else
-        {
-            this.scores = JsonConvert.DeserializeObject<Scores>(req.downloadHandler.text);
-            Debug.Log(scores);
-            observer.OnNext(scores);
-            observer.OnCompleted();
-        }
+        scores = JsonConvert.DeserializeObject<Scores>(req.downloadHandler.text);
+        return scores;
     }
 
     public IEnumerator Post(Scores.PostScore score)
